@@ -1,0 +1,12 @@
+#ifndef CPPESPEAK_CLI_GLOBAL_H
+#define CPPESPEAK_CLI_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(CPPESPEAK_CLI_LIBRARY)
+#define CPPESPEAK_CLI_EXPORT Q_DECL_EXPORT
+#else
+#define CPPESPEAK_CLI_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // CPPESPEAK_CLI_GLOBAL_H
