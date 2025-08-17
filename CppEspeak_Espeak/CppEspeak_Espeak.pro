@@ -11,12 +11,16 @@ CONFIG += c++17
 
 SOURCES += \
     cppespeak_espeak.cpp \
+    espeaker.cpp \
+    espeaksaver.cpp \
     espeakvoice.cpp \
     espeakvoices.cpp
 
 HEADERS += \
     CppEspeak_Espeak_global.h \
     cppespeak_espeak.h \
+    espeaker.h \
+    espeaksaver.h \
     espeakvoice.h \
     espeakvoices.h
 
@@ -32,3 +36,5 @@ else:unix: LIBS += -L$$PWD/../CppEspeak_Cli/build/Desktop-Debug/ -lCppEspeak_Cli
 
 INCLUDEPATH += $$PWD/../CppEspeak_Cli
 DEPENDPATH += $$PWD/../CppEspeak_Cli
+
+message("Include paths: $$INCLUDEPATH")
