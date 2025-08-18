@@ -7,6 +7,10 @@
 #include "espeakvoices.h"
 #include "espeaker.h"
 #include "espeaksaver.h"
+#include "options.h"
+#include "options_filename.h"
+#include "optionsloader.h"
+#include "optionssaver.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     setDefault();
 
     espeakProcess = NULL;
+
+    loadOptions();
 
 
 }
@@ -39,6 +45,43 @@ void MainWindow::setVoices()
     {
         ui->comboBoxLanguage->addItem(voice->name());
     }
+}
+
+void MainWindow::loadOptions()
+{
+    Options* opts = NULL;
+    if (QFile::exists(OPTIONS_FILENAME))
+    {
+        OptionsLoader loader = OptionsLoader();
+        opts = loader.load();
+    }
+    else
+    {
+        opts = Options::getDefault();
+    }
+
+    if (opts != NULL)
+    {
+        for (int i = 0; i < this->voices->length(); i++)
+        {
+            if ((voices->at(i)->language() == opts->voice()->language()) &&
+                (voices->at(i)->name() == opts->voice()->name()))
+            {
+                ui->comboBoxLanguage->setCurrentIndex(i);
+                break;
+            }
+        }
+        ui->sliderAmplitude->setValue(opts->amplitude());
+        ui->sliderPitch->setValue(opts->pitch());
+    }
+}
+
+void MainWindow::saveOptions()
+{
+    EspeakVoice* voice = this->voices->at(ui->comboBoxLanguage->currentIndex());
+    Options opts = Options(voice, ui->sliderAmplitude->value(), ui->sliderPitch->value());
+    OptionsSaver saver = OptionsSaver();
+    saver.save(opts);
 }
 
 void MainWindow::setDefault()
@@ -99,3 +142,8 @@ void MainWindow::on_buttonSave_pressed()
     }
 }
 
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    saveOptions();
+    QMainWindow::closeEvent(event);
+}

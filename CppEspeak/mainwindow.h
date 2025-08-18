@@ -24,9 +24,13 @@ private:
     void setVoices();
     void setDefault();
 
+    void loadOptions();
+    void saveOptions();
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void closeEvent(QCloseEvent* event);
 
 private slots:
     void on_buttonPlay_pressed();
